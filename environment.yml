@@ -1,0 +1,10 @@
+name: my_unet
+channels:
+  - defaults
+dependencies:
+  - numpy=1.14.3
+  - pandas=0.23.0
+  - matplotlib=2.2.2
+  - tensorflow=1.8.0
+  - keras=2.1.6
+  - python=3.6.5
