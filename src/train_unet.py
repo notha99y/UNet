@@ -1,0 +1,94 @@
+import os
+import json
+import keras
+from keras.models import Model
+from keras.layers import Conv2D, UpSampling2D, MaxPooling2D, Dropout, Cropping2D, Input, merge
+from keras.optimizers import SGD, Adam
+from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard
+from keras import backend as keras  # want the Keras modules to be compatible
+
+
+def UNet(filters_dims, activation='relu', kernel_initializer='glorot_uniform', padding='same'):
+    inputs = Input((240, 320, 3))
+    new_inputs = inputs
+    conv_layers = []
+    # Encoding Phase
+    print("Encoding Phase")
+    for i in range(len(filters_dims) - 1):
+        print("Stage :", i+1)
+        print("========================================")
+        print(new_inputs.shape)
+        conv = Conv2D(filters_dims[i], 3, activation=activation, padding=padding,
+                      kernel_initializer=kernel_initializer)(new_inputs)
+        conv = Conv2D(filters_dims[i], 3, activation=activation, padding=padding,
+                      kernel_initializer=kernel_initializer)(conv)
+        conv_layers.append(conv)
+        new_inputs = MaxPooling2D(pool_size=(2, 2))(conv)
+        print(new_inputs.shape)
+        # op = BatchNormalization()(op)
+
+    # middle phase
+    print("middle phase")
+    print("========================================")
+    conv = Conv2D(filters_dims[-1], 3, activation=activation, padding=padding,
+                  kernel_initializer=kernel_initializer)(new_inputs)
+    conv = Conv2D(filters_dims[-1], 3, activation=activation, padding=padding,
+                  kernel_initializer=kernel_initializer)(conv)
+    new_inputs = Dropout(0.5)(conv)
+    print(new_inputs.shape)
+
+    filters_dims.reverse()
+    conv_layers.reverse()
+
+    # Decoding Phase
+    print("Decoding Phase")
+    for i in range(1, len(filters_dims)):
+        print(i)
+        print("========================================")
+
+        print(new_inputs.shape)
+        up = Conv2D(filters_dims[i], 3, activation=activation, padding=padding,
+                    kernel_initializer=kernel_initializer)(UpSampling2D(size=(2, 2))(new_inputs))
+        concat = merge([conv_layers[i-1], up], mode='concat', concat_axis=3)
+        conv = Conv2D(filters_dims[i], 3, activation=activation, padding=padding,
+                      kernel_initializer=kernel_initializer)(concat)
+        new_inputs = Conv2D(filters_dims[i], 3, activation=activation, padding=padding,
+                            kernel_initializer=kernel_initializer)(conv)
+        print(new_inputs.shape)
+    outputs = Conv2D(8, 1, activation='softmax', padding='same',
+                     kernel_initializer='glorot_uniform')(new_inputs)
+    print(outputs.shape)
+    model = Model(input=inputs, output=outputs, name='UNet')
+    model.compile(optimizer=Adam(lr=1e-4), loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
+
+def train(model):
+
+    batchSz = 2
+    num_epochs = 1
+    print("Getting data.. Image shape: {}. Masks shape : {}".format(all_imgs.shape,
+                                                                    all_masks.shape))
+    print("The data will be split to Train Val: 80/20")
+
+    filepath = 'weights/' + model.name + '.{epoch:02d}-{loss:.2f}.hdf5'
+    checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1,
+                                 save_weights_only=True, save_best_only=True, mode='auto', period=1)
+    tensor_board = TensorBoard(log_dir='logs/', histogram_freq=1, batch_size=batchSz,
+                               write_grads=True, write_images=True)
+    history = model.fit(x=all_imgs, y=all_masks_oneHot, batch_size=batchSz, epochs=num_epochs,
+                        verbose=1, callbacks=[checkpoint, tensor_board], validation_split=0.2)
+
+    return history
+
+
+if __name__ == '__main__':
+    unet_config = 'config/unet.json'
+    print('unet json: {}'.format(os.path.abspath(unet_config)))
+    with open(unet_config) as json_file:
+        config = json.load(json_file)
+    print("Initializing UNet model")
+    model = UNet(filters_dims=config['filters_dims'],
+                 activation=config['activation'],
+                 kernel_initializer=config['kernel_initializer'],
+                 padding=config['padding'])

@@ -1,0 +1,6 @@
+{
+    "filters_dims" : [64, 128, 256, 512],
+    "activation" : "relu",
+    "kernel_initializer" : "glorot_uniform",
+    "padding" : "same"
+}
