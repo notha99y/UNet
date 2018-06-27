@@ -1,5 +1,10 @@
 import os
 import json
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
 import keras
 from keras.models import Model
 from keras.layers import Conv2D, UpSampling2D, MaxPooling2D, Dropout, Cropping2D, Input, merge
@@ -63,20 +68,20 @@ def UNet(filters_dims, activation='relu', kernel_initializer='glorot_uniform', p
     return model
 
 
-def train(model):
+def train(model, batch_size, epochs):
 
-    batchSz = 2
-    num_epochs = 1
     print("Getting data.. Image shape: {}. Masks shape : {}".format(all_imgs.shape,
                                                                     all_masks.shape))
     print("The data will be split to Train Val: 80/20")
 
+    # saving weights and logging
     filepath = 'weights/' + model.name + '.{epoch:02d}-{loss:.2f}.hdf5'
     checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1,
                                  save_weights_only=True, save_best_only=True, mode='auto', period=1)
-    tensor_board = TensorBoard(log_dir='logs/', histogram_freq=1, batch_size=batchSz,
-                               write_grads=True, write_images=True)
-    history = model.fit(x=all_imgs, y=all_masks_oneHot, batch_size=batchSz, epochs=num_epochs,
+    tensor_board = TensorBoard(log_dir='logs/', histogram_freq=1, batch_size=batch_size,
+                               write_grads=True, write_images=True)  # TODO read up more about TensorBoard
+
+    history = model.fit(x=all_imgs, y=all_masks_oneHot, batch_size=batch_size, epochs=epochs,
                         verbose=1, callbacks=[checkpoint, tensor_board], validation_split=0.2)
 
     return history
@@ -92,3 +97,13 @@ if __name__ == '__main__':
                  activation=config['activation'],
                  kernel_initializer=config['kernel_initializer'],
                  padding=config['padding'])
+
+    training_config = 'config/training.json'
+    print('training json: {}'.format(os.path.abspath(training_config)))
+    with open(training_config) as json_file:
+        config = json.load(json_file)
+    print("Initializing training instance")
+
+    train(model=model,
+          batch_size=config["batch_size"],
+          epochs=config["epochs"])
