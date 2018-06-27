@@ -14,7 +14,7 @@ Ananconda (download from [here](https://anaconda.org/anaconda/python))
 4. type jupyter notebook to launch jupyter notebook
 
 # Data
-The data is taken from ICCV09 [1] which contains 715 images sourced from LabelMe, MSRC, PASCAL VOC, and Geometric Context. Labels were obtained using Amazon's Mechanical Turk (AMT). <br>
+The data is taken from ICCV09 [1] which contains 715 images sourced from LabelMe, MSRC, PASCAL VOC, and Geometric Context. Labels were obtained using Amazon's Mechanical Turk (AMT). Data can be downloaded from [here](http://dags.stanford.edu/projects/scenedataset.html) <br>
 
 The labels are:
 
