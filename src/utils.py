@@ -51,5 +51,5 @@ def resizing(verbose=True, plot=False):
 
 
 if __name__ == '__main__':
-    transformed_images, transformed_masks = resizing()
-    # pass
+    # transformed_images, transformed_masks = resizing()
+    pass

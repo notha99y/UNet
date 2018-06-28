@@ -91,8 +91,7 @@ def train(model, x, y, batch_size, epochs):
     filepath = 'weights/' + model.name + '.{epoch:02d}-{loss:.2f}.hdf5'
     checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1,
                                  save_weights_only=True, save_best_only=True, mode='auto', period=1)
-    tensor_board = TensorBoard(log_dir='logs/', histogram_freq=1, batch_size=batch_size,
-                               write_grads=False, write_images=False)  # TODO read up more about TensorBoard
+    tensor_board = TensorBoard(log_dir='logs/')
 
     history = model.fit(x=x, y=y, batch_size=batch_size, epochs=epochs,
                         verbose=1, callbacks=[checkpoint, tensor_board], validation_split=0.2)
@@ -117,12 +116,6 @@ if __name__ == '__main__':
         config = json.load(json_file)
 
     print("Loading data")
-    data_path = os.path.join(os.getcwd(), 'data', 'processed')
-    image_path = os.path.join(data_path, 'images')
-    image_names = os.listdir(image_path)
-    mask_path = os.path.join(data_path, 'labels', 'regions')
-    mask_names = os.listdir(mask_path)
-
     transformed_images, transformed_masks = resizing(verbose=False, plot=False)
 
     transformed_images = np.array(transformed_images)
