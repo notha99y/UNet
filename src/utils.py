@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import cv2
 import pyarrow
 import pyarrow.parquet as pq
 
@@ -20,5 +21,34 @@ def convert_labels(file):
     return temp
 
 
+def resizing():
+    '''
+    resizes the images and masks to 240,320
+    '''
+    data_path = os.path.join(os.getcwd(), 'data', 'processed')
+    image_path = os.path.join(data_path, 'images')
+    image_names = os.listdir(image_path)
+
+    mask_path = os.path.join(data_path, 'labels', 'regions')
+    mask_names = os.listdir(mask_path)
+    images = []
+    masks = []
+    for i in range(len(image_names)):
+        img_temp = plt.imread(os.path.join(image_path, image_names[i]))
+        if img_temp.shape == (240, 320, 3):
+            images.append(plt.imread(os.path.join(image_path, image_names[i])))
+            masks.append(plt.imread(os.path.join(mask_path, mask_names[i])))
+        else:
+            print('Resizing image {} from {} -> (240,320)'.format(image_names[i],
+                                                                  img_temp.shape))
+            images.append(cv2.resize(img_temp, (320, 240)))
+            masks.append(cv2.resize(plt.imread(os.path.join(mask_path, mask_names[i])), (320, 240)))
+            # plt.imshow(img_temp)
+            plt.imshow(cv2.resize(img_temp, (320, 240)))
+            plt.show()
+    return images, masks
+
+
 if __name__ == '__main__':
-    pass
+    transformed_images, transformed_masks = resizing()
+    # pass
