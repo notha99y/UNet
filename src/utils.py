@@ -21,7 +21,7 @@ def convert_labels(file):
     return temp
 
 
-def resizing():
+def resizing(verbose=True, plot=False):
     '''
     resizes the images and masks to 240,320
     '''
@@ -39,13 +39,14 @@ def resizing():
             images.append(plt.imread(os.path.join(image_path, image_names[i])))
             masks.append(plt.imread(os.path.join(mask_path, mask_names[i])))
         else:
-            print('Resizing image {} from {} -> (240,320)'.format(image_names[i],
-                                                                  img_temp.shape))
+            if verbose:
+                print('Resizing image {} from {} -> (240,320)'.format(image_names[i],
+                                                                      img_temp.shape))
             images.append(cv2.resize(img_temp, (320, 240)))
             masks.append(cv2.resize(plt.imread(os.path.join(mask_path, mask_names[i])), (320, 240)))
-            # plt.imshow(img_temp)
-            plt.imshow(cv2.resize(img_temp, (320, 240)))
-            plt.show()
+            if plot:
+                plt.imshow(cv2.resize(img_temp, (320, 240)))
+                plt.show()
     return images, masks
 
 

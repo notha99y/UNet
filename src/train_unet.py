@@ -10,7 +10,12 @@ from keras.models import Model
 from keras.layers import Conv2D, UpSampling2D, MaxPooling2D, Dropout, Cropping2D, Input, merge
 from keras.optimizers import SGD, Adam
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard
-from keras import backend as keras  # want the Keras modules to be compatible
+from keras import backend as K  # want the Keras modules to be compatible
+from keras.utils import to_categorical
+
+from metrics import f1 as f1_score
+
+from utils import resizing
 
 
 def UNet(filters_dims, activation='relu', kernel_initializer='glorot_uniform', padding='same'):
@@ -64,14 +69,22 @@ def UNet(filters_dims, activation='relu', kernel_initializer='glorot_uniform', p
                      kernel_initializer='glorot_uniform')(new_inputs)
     print(outputs.shape)
     model = Model(input=inputs, output=outputs, name='UNet')
-    model.compile(optimizer=Adam(lr=1e-4), loss='categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=Adam(lr=1e-4),
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy', 'mse', f1_score])
     return model
 
 
-def train(model, batch_size, epochs):
+def train(model, x, y, batch_size, epochs):
+    # Running on multi GPU
+    print('Tensorflow backend detected; Applying memory usage constraints')
+    ss = K.tf.Session(config=K.tf.ConfigProto(gpu_options=K.tf.GPUOptions(allow_growth=True)))
+    K.set_session(ss)
+    ss.run(K.tf.global_variables_initializer())
+    K.set_learning_phase(1)
 
-    print("Getting data.. Image shape: {}. Masks shape : {}".format(all_imgs.shape,
-                                                                    all_masks.shape))
+    print("Getting data.. Image shape: {}. Masks shape : {}".format(x.shape,
+                                                                    y.shape))
     print("The data will be split to Train Val: 80/20")
 
     # saving weights and logging
@@ -79,9 +92,9 @@ def train(model, batch_size, epochs):
     checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1,
                                  save_weights_only=True, save_best_only=True, mode='auto', period=1)
     tensor_board = TensorBoard(log_dir='logs/', histogram_freq=1, batch_size=batch_size,
-                               write_grads=True, write_images=True)  # TODO read up more about TensorBoard
+                               write_grads=False, write_images=False)  # TODO read up more about TensorBoard
 
-    history = model.fit(x=all_imgs, y=all_masks_oneHot, batch_size=batch_size, epochs=epochs,
+    history = model.fit(x=x, y=y, batch_size=batch_size, epochs=epochs,
                         verbose=1, callbacks=[checkpoint, tensor_board], validation_split=0.2)
 
     return history
@@ -102,8 +115,24 @@ if __name__ == '__main__':
     print('training json: {}'.format(os.path.abspath(training_config)))
     with open(training_config) as json_file:
         config = json.load(json_file)
+
+    print("Loading data")
+    data_path = os.path.join(os.getcwd(), 'data', 'processed')
+    image_path = os.path.join(data_path, 'images')
+    image_names = os.listdir(image_path)
+    mask_path = os.path.join(data_path, 'labels', 'regions')
+    mask_names = os.listdir(mask_path)
+
+    transformed_images, transformed_masks = resizing(verbose=False, plot=False)
+
+    transformed_images = np.array(transformed_images)
+    transformed_masks = np.array(transformed_masks)
+    print("Performing one hot encoding")
+    transformed_masks_oneHot = to_categorical(transformed_masks, 8)
     print("Initializing training instance")
 
     train(model=model,
+          x=transformed_images,
+          y=transformed_masks_oneHot,
           batch_size=config["batch_size"],
           epochs=config["epochs"])
