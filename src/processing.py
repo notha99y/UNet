@@ -18,19 +18,9 @@ all sorted with the right naming
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import convert_labels
+from utils import convert_labels, make_dir
 import cv2
 import time
-
-
-def make_dir(directory):
-    '''
-    Creates a directory if there is no directory
-    '''
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    else:
-        print("Directory already exist: {}. No action taken".format(directory))
 
 
 def create_processed_dir():

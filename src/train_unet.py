@@ -15,7 +15,7 @@ from keras.utils import to_categorical
 
 from metrics import f1 as f1_score
 
-from utils import resizing
+from utils import resizing, make_dir
 
 
 def UNet(filters_dims, activation='relu', kernel_initializer='glorot_uniform', padding='same'):
@@ -90,6 +90,7 @@ def train(model, x, y, batch_size, epochs):
 
     # saving weights and logging
     filepath = 'weights/' + model.name + '.{epoch:02d}-{loss:.2f}.hdf5'
+    make_dir(filepath)
     checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1,
                                  save_weights_only=True, save_best_only=True, mode='auto', period=1)
     tensor_board = TensorBoard(log_dir='logs/')
@@ -117,7 +118,12 @@ if __name__ == '__main__':
         config = json.load(json_file)
 
     print("Loading data")
-    transformed_images, transformed_masks = resizing(verbose=False, plot=False)
+    data_path = os.path.join(os.getcwd(), 'data', 'processed')
+    image_path = os.path.join(data_path, 'images')
+    mask_path = os.path.join(data_path, 'labels', 'regions')
+
+    transformed_images, transformed_masks = resizing(
+        image_path, mask_path, verbose=False, plot=False)
 
     transformed_images = np.array(transformed_images)
     transformed_masks = np.array(transformed_masks)

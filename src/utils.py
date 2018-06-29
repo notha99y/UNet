@@ -6,6 +6,16 @@ import pyarrow
 import pyarrow.parquet as pq
 
 
+def make_dir(directory):
+    '''
+    Creates a directory if there is no directory
+    '''
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    else:
+        print("Directory already exist: {}. No action taken".format(directory))
+
+
 def convert_labels(file):
     '''
     function that takes in the .txt files from labels and convert them to
@@ -21,15 +31,13 @@ def convert_labels(file):
     return temp
 
 
-def resizing(verbose=True, plot=False):
+def resizing(image_path, mask_path, verbose=True, plot=False):
     '''
     resizes the images and masks to 240,320
     '''
-    data_path = os.path.join(os.getcwd(), 'data', 'processed')
-    image_path = os.path.join(data_path, 'images')
+
     image_names = os.listdir(image_path)
 
-    mask_path = os.path.join(data_path, 'labels', 'regions')
     mask_names = os.listdir(mask_path)
     images = []
     masks = []

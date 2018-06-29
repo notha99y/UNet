@@ -9,9 +9,20 @@ Ananconda (download from [here](https://anaconda.org/anaconda/python))
 
 ## steps
 1. Clone the Repo
-2. open a terminal
+2. open a terminal (bash)
 3. type conda env create -f=environment.yml
-4. type jupyter notebook to launch jupyter notebook
+4. cd SemanticSegmentation/data
+5. tar -xvzf iccv09Data.tar.gz
+6. mv iccv09Data raw
+7. cd ..
+8. python src/processing.py
+9. python src/train_unet.pt
+
+## To Launch Jupter notebook
+- type jupyter notebook to launch jupyter notebook
+
+## Test data
+- python src/load_weights_and_test.py
 
 # Data
 The data is taken from ICCV09 [1] which contains 715 images sourced from LabelMe, MSRC, PASCAL VOC, and Geometric Context. Labels were obtained using Amazon's Mechanical Turk (AMT). Data can be downloaded from [here](http://dags.stanford.edu/projects/scenedataset.html) <br>

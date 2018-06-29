@@ -9,7 +9,6 @@ dependencies:
   - tensorflow-gpu
   - keras=2.1.6
   - python
-  - pyarrow
   - opencv
   - pillow
   # - numpy=1.14.3
