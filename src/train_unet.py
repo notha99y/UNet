@@ -78,7 +78,8 @@ def UNet(filters_dims, activation='relu', kernel_initializer='glorot_uniform', p
 def train(model, x, y, batch_size, epochs):
     # Running on multi GPU
     print('Tensorflow backend detected; Applying memory usage constraints')
-    ss = K.tf.Session(config=K.tf.ConfigProto(gpu_options=K.tf.GPUOptions(allow_growth=True)))
+    ss = K.tf.Session(config=K.tf.ConfigProto(gpu_options=K.tf.GPUOptions(allow_growth=True),
+                                              log_device_placement=True))
     K.set_session(ss)
     ss.run(K.tf.global_variables_initializer())
     K.set_learning_phase(1)
