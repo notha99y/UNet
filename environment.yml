@@ -6,6 +6,7 @@ dependencies:
   - pandas
   - matplotlib
   - tensorflow
+  - tensorflow-gpu
   - keras=2.1.6
   - python
   - pyarrow
