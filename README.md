@@ -5,7 +5,7 @@ Semantic Segmentation is done by assigning each pixel in the image a class. This
 
 # How to set up
 ## what you need
-Ananconda (download from [here](https://anaconda.org/anaconda/python))
+Anaconda (download from [here](https://anaconda.org/anaconda/python))
 
 ## steps
 1. Clone the Repo
@@ -19,7 +19,7 @@ Ananconda (download from [here](https://anaconda.org/anaconda/python))
 8. python src/processing.py
 9. python src/train_unet.pt
 ```
-## To Launch Jupter notebook
+## To Launch Jupyter notebook
 - type jupyter notebook to launch jupyter notebook
 
 ## Test data
