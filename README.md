@@ -55,10 +55,10 @@ The UNet architecture can be seen below <br>
 # Training
 In this repo, we would be using a small version of UNet and train it over 50 epoch. The accuracy_loss_plot is shown below <br>
 ### Accuracy plot
-[Accuracy plot](plots/acc.html)
+[Accuracy plot](https://github.com/notha99y/SemanticSegmentation/blob/master/plots/acc.html)
 
 ### Loss plot
-[Loss plot](plots/loss.html)
+[Loss plot](https://github.com/notha99y/SemanticSegmentation/blob/master/plots/acc.html)
 
 # Reference
 [1] Decomposing a Scene into Geometric and Semantically Consistent Regions, Stephen Gould, Richard Fulton, Daphne Koller, ICCV 2009
