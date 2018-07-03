@@ -10,6 +10,7 @@ Ananconda (download from [here](https://anaconda.org/anaconda/python))
 ## steps
 1. Clone the Repo
 2. open a terminal (bash)
+```
 3. type conda env create -f=environment.yml
 4. cd SemanticSegmentation/data
 5. tar -xvzf iccv09Data.tar.gz
@@ -17,13 +18,14 @@ Ananconda (download from [here](https://anaconda.org/anaconda/python))
 7. cd ..
 8. python src/processing.py
 9. python src/train_unet.pt
-
+```
 ## To Launch Jupter notebook
 - type jupyter notebook to launch jupyter notebook
 
 ## Test data
-- python src/load_weights_and_test.py
-
+```
+python src/load_weights_and_test.py
+```
 # Data
 The data is taken from ICCV09 [1] which contains 715 images sourced from LabelMe, MSRC, PASCAL VOC, and Geometric Context. Labels were obtained using Amazon's Mechanical Turk (AMT). Data can be downloaded from [here](http://dags.stanford.edu/projects/scenedataset.html) <br>
 
@@ -52,8 +54,11 @@ The UNet architecture can be seen below <br>
 
 # Training
 In this repo, we would be using a small version of UNet and train it over 50 epoch. The accuracy_loss_plot is shown below <br>
+### Accuracy plot
+[Accuracy plot](plots/acc.html)
 
-![plot](pictures/result/accuracy_loss_plot.png)
+### Loss plot
+[Loss plot](plots/loss.html)
 
 # Reference
 [1] Decomposing a Scene into Geometric and Semantically Consistent Regions, Stephen Gould, Richard Fulton, Daphne Koller, ICCV 2009

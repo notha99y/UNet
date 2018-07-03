@@ -1,0 +1,11 @@
+{
+    "plot_title": "UNet Loss and MSE plots",
+    "plot_width": 1200,
+    "plot_height": 1200,
+    "plot_legend_location": "top_right",
+    "plot_legend_click_policy":"hide",
+    "output_file_name": "plots/loss.html",
+    "output_file_title": "UNet Loss and MSE plots",
+    "TOOLTIPS1": "(Epoch, Loss)",
+    "TOOLTIPS2": "($x, $y)"
+}

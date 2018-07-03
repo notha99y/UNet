@@ -1,0 +1,11 @@
+{
+    "plot_title": "UNet Acc and F1_score plots",
+    "plot_width": 1200,
+    "plot_height": 1200,
+    "plot_legend_location": "top_right",
+    "plot_legend_click_policy":"hide",
+    "output_file_name": "plots/acc.html",
+    "output_file_title": "UNet Acc and F1_score plots",
+    "TOOLTIPS1": "(Epoch, Acc)",
+    "TOOLTIPS2": "($x, $y)"
+}

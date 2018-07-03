@@ -97,9 +97,23 @@ if __name__ == "__main__":
     transformed_images = np.array(transformed_images)
     transformed_masks = np.array(transformed_masks)
 
-    image_num = int(input("Choose image from 0 to {}".format(len(transformed_masks) - 1)))
+    # validating user input
     while True:
+        image_num = input("Choose image from 0 to {}".format(len(transformed_masks) - 1))
+        try:
+            image_num = int(image_num)
+        except ValueError:
+            print("please input a valid number from 0 to {} . {} is not a valid number".format(
+                len(transformed_masks) - 1, image_num))
+            continue
+        if 0 <= image_num <= len(transformed_masks)-1:
+            break
+        else:
+            print("Please input a number from 0 to {}. {} is out of range".format(
+                len(transformed_masks) - 1, image_num))
 
+    # plotting Segmentation
+    while True:
         print('Showing image: {}'.format(image_num))
         test_image = transformed_images[image_num]
         test_mask = transformed_masks[image_num]
@@ -135,5 +149,18 @@ if __name__ == "__main__":
         fig.text(0.65, 0.4, "Epoch: {}".format(epoch), fontsize=20, fontweight='bold')
 
         plt.show()
-        image_num = int(
-            input("next image number (Choose image from 0 to {}): ".format(len(transformed_masks) - 1)))
+
+        # validating user input
+        while True:
+            image_num = input("Choose image from 0 to {}".format(len(transformed_masks) - 1))
+            try:
+                image_num = int(image_num)
+            except ValueError:
+                print("please input a valid number from 0 to {} . {} is not a valid number".format(
+                    len(transformed_masks) - 1, image_num))
+                continue
+            if 0 <= image_num <= len(transformed_masks)-1:
+                break
+            else:
+                print("Please input a number from 0 to {}. {} is out of range".format(
+                    len(transformed_masks) - 1, image_num))

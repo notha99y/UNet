@@ -1,0 +1,8 @@
+{"samplewise_center":false,
+"samplewise_std_normalization":false,
+"rotation_range":90,
+"horizontal_flip":true,
+"vertical_flip":true,
+"zoom_range":0.5,
+"seed":0
+}
