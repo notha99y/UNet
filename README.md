@@ -17,12 +17,13 @@ Anaconda (download from [here](https://anaconda.org/anaconda/python))
 6. mv iccv09Data raw
 7. cd ..
 8. python src/processing.py
-9. python src/train_unet.pt
+9. python src/train_unet.py
 ```
 ## To Launch Jupyter notebook
 - type jupyter notebook to launch jupyter notebook
 
 ## Test data
+After running src/train_unet.py, you should have some weights. You can run the follwing step to see your results.
 ```
 python src/load_weights_and_test.py
 ```
