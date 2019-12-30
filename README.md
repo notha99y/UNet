@@ -31,7 +31,7 @@ jupyter notebook
 ## Test data
 After running src/train_unet.py, you should have some weights. You can run the follwing step to see your results.
 ```bash
-python src/load_weights_and_test.py
+python src/load_weights_and_test.py -w <PATH OF TRAINED MODEL>
 ```
 # Data
 The data is taken from ICCV09 [1] which contains 715 images sourced from LabelMe, MSRC, PASCAL VOC, and Geometric Context. Labels were obtained using Amazon's Mechanical Turk (AMT). Data can be downloaded from [here](http://dags.stanford.edu/projects/scenedataset.html) <br>
