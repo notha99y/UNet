@@ -1,6 +1,8 @@
+/logs
+/weights
+
 /data/raw
 /data/processed
 /data/testing
-/weights
-/weight
+
 /src/__pycache__/
