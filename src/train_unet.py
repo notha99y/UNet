@@ -89,8 +89,9 @@ def train(model, x, y, batch_size, epochs):
     print("The data will be split to Train Val: 80/20")
 
     # saving weights and logging
+    weights_path = os.path.join(os.getcwd(), 'weights')
+    make_dir(weights_path)
     filepath = 'weights/' + model.name + '.{epoch:02d}-{loss:.2f}.hdf5'
-    make_dir(filepath)
     checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1,
                                  save_weights_only=True, save_best_only=True, mode='auto', period=1)
     tensor_board = TensorBoard(log_dir='logs/')

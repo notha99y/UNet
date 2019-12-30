@@ -24,11 +24,13 @@ python src/processing.py
 python src/train_unet.py
 ```
 ## To Launch Jupyter notebook
-- type jupyter notebook to launch jupyter notebook
-
+type the following in your bash
+```bash
+jupyter notebook
+```
 ## Test data
 After running src/train_unet.py, you should have some weights. You can run the follwing step to see your results.
-```
+```bash
 python src/load_weights_and_test.py
 ```
 # Data

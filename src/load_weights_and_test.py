@@ -1,6 +1,6 @@
 import os
 import json
-
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -70,6 +70,15 @@ def UNet(filters_dims, activation='relu', kernel_initializer='glorot_uniform', p
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-w', '--weights', help='weights file in hdf5 format', required=True)
+    args = parser.parse_args()
+    ss = K.tf.Session(config=K.tf.ConfigProto(gpu_options=K.tf.GPUOptions(allow_growth=True),
+                                              log_device_placement=True))
+    K.set_session(ss)
+    ss.run(K.tf.global_variables_initializer())
+    K.set_learning_phase(0)
+
     unet_config = 'config/unet.json'
     print('unet json: {}'.format(os.path.abspath(unet_config)))
     with open(unet_config) as json_file:
@@ -81,11 +90,9 @@ if __name__ == "__main__":
                  padding=config['padding'])
 
     # Loading weights
-    weights_path = os.path.join(os.getcwd(), 'weights')
-    weights_names = os.listdir(weights_path)
-    print("Loading weights: {}".format(os.path.join(weights_path, weights_names[0])))
-    model.load_weights(os.path.join(weights_path, weights_names[0]))
-
+    model_name = os.path.basename(args.weights)
+    print('Loading model: {}'.format(model_name))
+    model.load_weights(args.weights)
     # Getting images
     data_path = os.path.join(os.getcwd(), 'data', 'processed')
     image_path = os.path.join(data_path, 'images')
@@ -141,8 +148,8 @@ if __name__ == "__main__":
 
         ax[1, 1].set_axis_off()
 
-        loss = weights_names[0].split(".")[1].split("-")[1] + "." + weights_names[0].split(".")[2]
-        epoch = weights_names[0].split(".")[1].split("-")[0]
+        loss = model_name.split('-')[-1].split('.')[0]
+        epoch = model_name.split('-')[0].split('.')[-1]
         text = '0: sky \n1: tree \n2: road\n3: grass\n4: water\n5: building\n6: mountain\n7: foreground'
         fig.text(0.65, 0.1, text)
         fig.text(0.7, 0.37, "Loss: {}".format(loss))

@@ -1,5 +1,6 @@
 /logs
 /weights
+/config
 
 /data/raw
 /data/processed
