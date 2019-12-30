@@ -9,15 +9,19 @@ Anaconda (download from [here](https://anaconda.org/anaconda/python))
 
 ## steps
 1. Clone the Repo
-2. open a terminal (bash)
-```
-3. type conda env create -f=environment.yml
-4. cd SemanticSegmentation/data
-5. tar -xvzf iccv09Data.tar.gz
-6. mv iccv09Data raw
-7. cd ..
-8. python src/processing.py
-9. python src/train_unet.py
+1. open a terminal (bash) <br>
+
+In bash type the following
+```bash
+cd UNet
+conda env create -f=environment.yml # this would download the necessary python packages from anaconda cloud
+conda activate my_unet
+cd data
+tar -xvzf iccv09Data.tar.gz
+mv iccv09Data raw # renames folder to raw for data integrity
+cd ..
+python src/processing.py
+python src/train_unet.py
 ```
 ## To Launch Jupyter notebook
 - type jupyter notebook to launch jupyter notebook
